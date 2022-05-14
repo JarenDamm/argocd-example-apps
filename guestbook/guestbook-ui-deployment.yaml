@@ -9,9 +9,11 @@ spec:
     matchLabels:
       app: guestbook-ui
   template:
-    metadata:
+    metadata:      
       labels:
         app: guestbook-ui
+      annotations:
+        linkerd.io/inject: enabled
     spec:
       containers:
       - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
