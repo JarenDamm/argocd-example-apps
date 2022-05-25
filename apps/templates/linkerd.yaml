@@ -10,9 +10,7 @@ spec:
   source:
     repoURL: https://helm.linkerd.io/stable
     chart: linkerd2
-    targetRevision: ~2.11.1
-    helm:
-      releaseName: linkerd      
+    targetRevision: 2.11.1          
   destination:
     server: https://kubernetes.default.svc
     namespace: linkerd
