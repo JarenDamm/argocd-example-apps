@@ -1,9 +1,8 @@
-{{ if .Values.linkerd.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Release.Name }}-linkerd
-  namespace: {{ .Values.argoNamespace }}
+  name: linkerd
+  namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -11,21 +10,17 @@ spec:
   source:
     repoURL: https://helm.linkerd.io/stable
     chart: linkerd2
-    targetRevision: {{ .Values.linkerd.targetRevision | quote }}
+    targetRevision: ~2.11.1
     helm:
-      releaseName: linkerd
-      version: v3
-      {{- with .Values.linkerd.values }}
-      values: |
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      releaseName: linkerd      
   destination:
     server: https://kubernetes.default.svc
     namespace: linkerd
   syncPolicy:
-  {{- toYaml .Values.linkerd.syncPolicy | nindent 4 }}
-  {{- with .Values.linkerd.ignoreDifferences }}
-  ignoreDifferences:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-{{- end }}
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true  
